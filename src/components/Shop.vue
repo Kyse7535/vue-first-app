@@ -3,39 +3,29 @@
     <h2>LIVRAISON GRATUITE POUR TOUTE COMMANDE DE 30€ ET PLUS</h2>
 </div>
 <div id="part-2-shop">
-    <div id="categories">
-        <ul>
-            <li>Categories</li>
-            <li @click="setCategory(-1)">Tous</li>
-            <li v-for="(categorie, index) in categories" :key="index" class="categorie-item"
-            @click="setCategory(index)">
-            {{categorie}}</li>
-            
-        </ul>
-    </div>
+    <CategorieList />
     <div id="products-list">
-        <ProductList :category="selectedCategory" :titre="nom" :sortId="sort" />
+       
+        <ProductList :titre="nom" :sortId="sort" />
     </div>
 </div>
 </template>
 <script>
-import ProductList from "./ProductList.vue";
 
+import ProductList from "./ProductList.vue";
+import CategorieList from "./CategorieList.vue";
 export default {
     name: 'shop-vue',
     components: {
-    ProductList
+    ProductList,
+    CategorieList,
 },
     data() {
         return {
-            categories: [],
             nom: '',
             sort: 1,
-            selectedCategory: ''
+           
         }
-    },
-     created() {
-        this.initData()
     },
     computed: {
         nomIsEmpty() {
@@ -43,26 +33,9 @@ export default {
         }
     },
     methods: {
-        initData() {
-            this.$store.dispatch('fetchCategories')
-            this.$store.dispatch('fetchProducts')
-            this.categories = this.$store.getters.getAllCategories
-
-        },
         deleteNom() {
             this.nom = ''
-
-        },
-       
-        setCategory(categoryId) {
-            if (categoryId < 0) {
-                this.products = this.$store.getters.getAllProducts
-            }
-            else {
-                this.selectedCategory = this.categories[categoryId]
-            }
-            
-        }
+        }, 
     }
 }
 </script>
@@ -83,21 +56,9 @@ export default {
     justify-content: space-between;
     width: 60%;
     margin: 0 auto;
-
 }
 
-#categories {
-    border-right: 1px solid #000;
-    width: 20%;
-}
 
-#categories li{
-    list-style: none;
-}
-
-.categorie-item {
-    cursor: pointer;
-}
 
 #search input {
     border: none;
